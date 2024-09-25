@@ -1,5 +1,5 @@
 def dfa(m, string):
-    q, sigma, delta, q0, f = m
+    delta, q0, f = m
     qA = q0
     token = ''
     tape = ''
@@ -76,11 +76,10 @@ delta = {
     }
 }
 
-q = ['q0', 'q1', 'q2', 'q3', 'q10', 'q11', 'q20', 'q21', 'q22', 'q23', 'q30', 'q31', 'q32', 'q33', 'q34', 'q40', 'q50']
 f = ['q3', 'q11', 'q23', 'q34', 'q40', 'q50']
-sigma = ['V', 'A', 'R', 'I', 'F', 'E', 'L', 'S', 'E', 'W', 'H', 'I', 'L', 'E', '+', '-', '*', '/', '==', '>', '<', '>=', '<=', '!=', 
-         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '(', ')', '{', '}']
 
 
-print(dfa([q, sigma, delta, 'q0', f], 'ELSE a == 2'))  # True
+
+print(dfa([ delta, 'q0', f], ' a == 2'))  # True
+print(dfa([ delta, 'q0', f], 'ELSE a == '))  # Falsee
+print(dfa([ delta, 'q0', f], 'VAR a = b'))  # True
