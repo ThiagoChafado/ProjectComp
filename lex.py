@@ -50,7 +50,7 @@ def dfa(m, string):
             add_symbols(token.strip(), 'id')
         elif token.strip().isdigit():
             add_symbols(token.strip(), 'number')
-        elif token.strip() == '+' or token.strip() == '=' or token.strip() == '/' or token.strip() == '-' or token.strip() == '*':
+        elif token.strip() == '+' or token.strip() == '=' or token.strip() == '/' or token.strip() == '-' or token.strip() == '*' or token.strip() == '!':
             add_symbols(token.strip(), 'operator')
         elif token.strip() == '{' or token.strip() == '}':
             add_symbols(token.strip(),'colchetes')
@@ -81,6 +81,9 @@ delta = {
         '=': 'q64',
         '/': 'q65',
         '*': 'q66',
+        '>': 'q67',
+        '<': 'q68',
+        '!': 'q69'
 
     },
     'q1': {
@@ -115,9 +118,9 @@ delta = {
 }
 
 f = ['q3', 'q11', 'q23', 'q34', 'q40', 'q50',
-     'q60', 'q61', 'q62', 'q63', 'q64', 'q65', 'q66']
+     'q60', 'q61', 'q62', 'q63', 'q64', 'q65', 'q66','q67','q68','q69']
 
-lex = dfa([delta, 'q0', f], '   VAR a = 1 { VAR b = 3 } WHILE 2 = 2')
+lex = dfa([delta, 'q0', f], '   VAR a = 1 { VAR b = 3 } WHILE b > 2')
 print(f'TABELA DE SIMBOLOS: \n{lex[0]}')
 print(f'FITA DE SAIDA: \n {lex[1]}')
 
