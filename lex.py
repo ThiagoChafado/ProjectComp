@@ -120,8 +120,17 @@ delta = {
 f = ['q3', 'q11', 'q23', 'q34', 'q40', 'q50',
      'q60', 'q61', 'q62', 'q63', 'q64', 'q65', 'q66','q67','q68','q69']
 
-lex = dfa([delta, 'q0', f], '   VAR a = 1 { VAR b = 3 } WHILE b > 2')
-print(f'TABELA DE SIMBOLOS: \n{lex[0]}')
-print(f'FITA DE SAIDA: \n {lex[1]}')
+
+codein = ''
+with open("code","r+") as codefile:
+    codein = codefile.read()
+
+lex = dfa([delta, 'q0', f], codein )
+
+tape = lex[1].strip()
+tapeFile = open("tape","w")
+tapeFile.write(str(tape))
+# print(f'TABELA DE SIMBOLOS: \n{lex[0]}')
+# print(f'FITA DE SAIDA: \n {lex[1]}')
 
 

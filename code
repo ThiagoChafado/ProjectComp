@@ -1,0 +1,1 @@
+VAR a = 1 { VAR b = 3 } WHILE
