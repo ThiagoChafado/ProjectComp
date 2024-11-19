@@ -35,9 +35,8 @@ slr_table = {
         
         (6,'='):'s13',
         (6,'+'):'s14',
-        (6,'-'):'s15',
-        (6,'/'):'s16',
-        (6,'*'):'s17',
+        (6,'/'):'s15',
+        (6,'*'):'s16',
         
         (7,'VAR'):'r8',
         (7,'IF'):'r8',
@@ -60,42 +59,38 @@ slr_table = {
         (9, '$'): 'r3',
         
         
-        (10,'{ S }'):'s19',
+        (10,'ELSE'):'s18',
         
-        (11,'{ S }'):'s20',
-        
-        
-        
-        (19,'ELSE'):'s24',
-        
-        (20,'VAR'):'r6',
-        (20,'IF'):'r6',
-        (20,'WHILE'):'r6',
-        (20,'$'):'r6',
-        
-        (21,'VAR'):'r7',
-        (21,'IF'):'r7',
-        (21,'WHILE'):'r7',
-        (21,'$'):'r7',
-        
-        (22,'VAR'):'r4',
-        (22,'IF'):'r4',
-        (22,'WHILE'):'r4',
-        (22,'$'):'r4',
-        
-        (23,'VAR'):'r14',
-        (23,'IF'):'r14',
-        (23,'WHILE'):'r14',
-        (23,'$'):'r14',
+        (11,'{ S }'):'s19',
         
         
         
-        (24,'{ S }'):'s25',
+        (18,'{ S }'):'s23',
         
-        (25,'VAR'):'r5',
-        (25,'IF'):'r5',
-        (25,'WHILE'):'r5',
-        (25,'$'):'r5',
+        (19,'VAR'):'r6',
+        (19,'IF'):'r6',
+        (19,'WHILE'):'r6',
+        (19,'$'):'r6',
+        
+        (20,'VAR'):'r7',
+        (20,'IF'):'r7',
+        (20,'WHILE'):'r7',
+        (20,'$'):'r7',
+        
+        (21,'VAR'):'r4',
+        (21,'IF'):'r4',
+        (21,'WHILE'):'r4',
+        (21,'$'):'r4',
+        
+        (22,'VAR'):'r14',
+        (22,'IF'):'r14',
+        (22,'WHILE'):'r14',
+        (22,'$'):'r14',
+        
+        (23,'VAR'):'r5',
+        (23,'IF'):'r5',
+        (23,'WHILE'):'r5',
+        (23,'$'):'r5',
         
         (0, 'IDENTIFIER'):'s7',
         (2, 'IDENTIFIER'):'s7',  
@@ -107,35 +102,25 @@ slr_table = {
         (14,'IDENTIFIER'):'r16',
         (15,'IDENTIFIER'):'r17',
         (16,'IDENTIFIER'):'r18',
-        (17,'IDENTIFIER'):'R19',
-        (18,'IDENTIFIER'):'s23',
-        (19,'IDENTIFIER'):'r5',
-        (20,'IDENTIFIER'):'r6',
-        (21,'IDENTIFIER'):'r7',
-        (22,'IDENTIFIER'):'r4',
-        (23,'IDENTIFIER'):'r14',
-        (24,'IDENTIFIER'):'r4',
-        (25,'IDENTIFIER'):'r5',
+        (17,'IDENTIFIER'):'s22',
+        (19,'IDENTIFIER'):'r6',
+        (20,'IDENTIFIER'):'r7',
+        (21,'IDENTIFIER'):'r4',
+        (22,'IDENTIFIER'):'r14',
+        (23,'IDENTIFIER'):'r5',
 
     },
     'goto': {
         (0, 'S'): 1,
         (0, 'A'): 2,
         (0,'B'):6,
-        
         (2,'S') : 8,
         (2,'A'):2,
         (2,'B'):6,
-        
         (3,'B'):9,
-        
         (6,'F'):12,
-        
-        (3,'F'):12,
-        (12,'B'):21,
+        (12,'B'):20,
         (17,'E'):21,
-        (18,'E'):22
-        
     }
 }
 
@@ -144,6 +129,11 @@ def slr_parse(token_stream, grammar, slr_table):
     pointer = 0
 
     while True:
+        linear_grammar = []
+        for left, productions in grammar.items():
+            for production in productions:
+                linear_grammar.append((left, production))
+
         
         state = stack[-1]
 
@@ -171,15 +161,15 @@ def slr_parse(token_stream, grammar, slr_table):
 
         elif action.startswith('r'):  # Reduce
             production_index = int(action[1:])
-            left_side, right_side = list(grammar.items())[production_index]
+            left_side, right_side = linear_grammar[production_index]
 
-            for i in range(len(right_side[0])):
+            for i in range(len(right_side)):  # Pular o comprimento do lado direito
                 stack.pop()
 
             top_state = stack[-1]
             stack.append(slr_table['goto'][(top_state, left_side)])
+            print(f"Redução: {left_side} -> {' '.join(right_side)}")
 
-            print(f"Redução: {left_side} -> {' '.join(right_side[0])}")
         else:
             print(f"Erro desconhecido na ação '{action}'")
             return False
@@ -209,7 +199,7 @@ def tokenize(input_string):
             return None
     return tokens
 
-input_string = "VAR a ="
+input_string = "VAR a "
 
 
 tokens = tokenize(input_string)
