@@ -108,6 +108,7 @@ slr_table = {
         (21,'IDENTIFIER'):'r4',
         (22,'IDENTIFIER'):'r14',
         (23,'IDENTIFIER'):'r5',
+        
 
     },
     'goto': {
@@ -199,8 +200,10 @@ def tokenize(input_string):
             return None
     return tokens
 
-input_string = "VAR a "
-
+input_string = "VAR b = teste"
+slr_table['action'][(18, 'IDENTIFIER')] = 's24'  # Estado 24 para processar 'IDENTIFIER' como E
+slr_table['goto'][(24, 'E')] = 25  # Transição para E
+slr_table['action'][(24, '$')] = 'r4'  # Reduzir com A -> VAR B = E
 
 tokens = tokenize(input_string)
 
